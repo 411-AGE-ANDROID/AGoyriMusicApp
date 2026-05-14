@@ -6,7 +6,6 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -34,11 +33,12 @@ fun AlbumCard(
 ) {
     Box(
         modifier = modifier
-            .width(200.dp)
-            .height(240.dp)
-            .clip(RoundedCornerShape(16.dp))
+            .width(220.dp)
+            .height(260.dp)
+            .clip(RoundedCornerShape(20.dp))
             .clickable(onClick = onClick)
     ) {
+        // Imagen ocupa todo el card
         AsyncImage(
             model = ImageRequest.Builder(LocalContext.current)
                 .data(album.image)
@@ -46,61 +46,61 @@ fun AlbumCard(
                 .build(),
             contentDescription = album.title,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop,
-            error = {
-                Box(
-                    modifier = Modifier.fillMaxSize().background(Color(0xFF6B2FA0)),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Icon(Icons.Default.MusicNote, contentDescription = null, tint = Color.White)
-                }
-            }
+            contentScale = ContentScale.Crop
         )
+
+        // Scrim solo en la parte inferior (último 45% del card)
         Box(
             modifier = Modifier
-                .fillMaxSize()
+                .fillMaxWidth()
+                .fillMaxHeight(0.55f)
+                .align(Alignment.BottomCenter)
                 .background(
                     Brush.verticalGradient(
-                        colors = listOf(Color.Transparent, Color(0xCC6B2FA0)),
-                        startY = 80f
+                        colors = listOf(Color.Transparent, Color(0xE0000000))
                     )
                 )
         )
-        Column(
+
+        // Título, artista y botón play
+        Row(
             modifier = Modifier
-                .align(Alignment.BottomStart)
-                .padding(12.dp)
+                .fillMaxWidth()
+                .align(Alignment.BottomCenter)
+                .padding(horizontal = 12.dp, vertical = 14.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = album.title,
-                color = Color.White,
-                fontSize = 15.sp,
-                fontWeight = FontWeight.Bold,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-            Text(
-                text = album.artist,
-                color = Color(0xFFE0C8F8),
-                fontSize = 12.sp,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        }
-        Box(
-            modifier = Modifier
-                .align(Alignment.BottomEnd)
-                .padding(12.dp)
-                .size(40.dp)
-                .background(Color(0xFF6B2FA0), CircleShape),
-            contentAlignment = Alignment.Center
-        ) {
-            Icon(
-                imageVector = Icons.Default.PlayArrow,
-                contentDescription = "Play",
-                tint = Color.White,
-                modifier = Modifier.size(22.dp)
-            )
+            Column(modifier = Modifier.weight(1f).padding(end = 8.dp)) {
+                Text(
+                    text = album.title,
+                    color = Color.White,
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Bold,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+                Text(
+                    text = album.artist,
+                    color = Color(0xCCFFFFFF),
+                    fontSize = 12.sp,
+                    maxLines = 1,
+                    overflow = TextOverflow.Ellipsis
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .size(36.dp)
+                    .background(Color.White, CircleShape),
+                contentAlignment = Alignment.Center
+            ) {
+                Icon(
+                    imageVector = Icons.Default.PlayArrow,
+                    contentDescription = "Play",
+                    tint = Color(0xFF1A1A2E),
+                    modifier = Modifier.size(20.dp)
+                )
+            }
         }
     }
 }

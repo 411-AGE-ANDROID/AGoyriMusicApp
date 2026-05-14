@@ -6,8 +6,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.MoreVert
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
@@ -16,11 +20,11 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
 import coil.request.ImageRequest
 import com.amirgoyri.musicapp.data.model.Album
@@ -38,10 +42,14 @@ fun HomeScreen(
     val isPlaying by viewModel.isPlaying.collectAsState()
     val currentAlbum by viewModel.currentAlbum.collectAsState()
 
-    Box(modifier = Modifier.fillMaxSize().background(Color(0xFFF5EEFF))) {
+    Box(
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color(0xFFEDE7F6))
+    ) {
         LazyColumn(
             modifier = Modifier.fillMaxSize(),
-            contentPadding = PaddingValues(bottom = 80.dp)
+            contentPadding = PaddingValues(bottom = 88.dp)
         ) {
             item { HomeHeader() }
 
@@ -49,10 +57,10 @@ fun HomeScreen(
                 is AlbumsUiState.Loading -> {
                     item {
                         Box(
-                            modifier = Modifier.fillMaxWidth().height(200.dp),
+                            modifier = Modifier.fillMaxWidth().height(220.dp),
                             contentAlignment = Alignment.Center
                         ) {
-                            CircularProgressIndicator(color = Color(0xFF6B2FA0))
+                            CircularProgressIndicator(color = Color(0xFF7C4DFF))
                         }
                     }
                 }
@@ -62,18 +70,12 @@ fun HomeScreen(
                             modifier = Modifier.fillMaxWidth().padding(24.dp),
                             horizontalAlignment = Alignment.CenterHorizontally
                         ) {
-                            Text(
-                                text = "Error: ${state.message}",
-                                color = Color.Red,
-                                fontSize = 14.sp
-                            )
+                            Text("Error: ${state.message}", color = Color.Red, fontSize = 14.sp)
                             Spacer(modifier = Modifier.height(8.dp))
                             Button(
                                 onClick = { viewModel.fetchAlbums() },
-                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF6B2FA0))
-                            ) {
-                                Text("Retry")
-                            }
+                                colors = ButtonDefaults.buttonColors(containerColor = Color(0xFF7C4DFF))
+                            ) { Text("Retry") }
                         }
                     }
                 }
@@ -81,18 +83,13 @@ fun HomeScreen(
                     val albums = state.albums
 
                     item {
-                        Text(
-                            text = "Albums",
-                            color = Color(0xFF1A1A2E),
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(start = 20.dp, top = 4.dp, bottom = 12.dp)
-                        )
+                        SectionHeader(title = "Albums", modifier = Modifier.padding(top = 20.dp))
                     }
                     item {
                         LazyRow(
-                            contentPadding = PaddingValues(horizontal = 20.dp),
-                            horizontalArrangement = Arrangement.spacedBy(16.dp)
+                            contentPadding = PaddingValues(horizontal = 16.dp),
+                            horizontalArrangement = Arrangement.spacedBy(12.dp),
+                            modifier = Modifier.padding(top = 12.dp)
                         ) {
                             items(albums) { album ->
                                 AlbumCard(
@@ -106,13 +103,7 @@ fun HomeScreen(
                         }
                     }
                     item {
-                        Text(
-                            text = "Recently Played",
-                            color = Color(0xFF1A1A2E),
-                            fontSize = 20.sp,
-                            fontWeight = FontWeight.Bold,
-                            modifier = Modifier.padding(start = 20.dp, top = 24.dp, bottom = 12.dp)
-                        )
+                        SectionHeader(title = "Recently Played", modifier = Modifier.padding(top = 24.dp))
                     }
                     items(albums) { album ->
                         RecentlyPlayedItem(
@@ -141,52 +132,84 @@ private fun HomeHeader() {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp)
+            .padding(horizontal = 16.dp, vertical = 16.dp)
+            .clip(RoundedCornerShape(24.dp))
             .background(
-                Brush.verticalGradient(
-                    colors = listOf(Color(0xFF4A0E8F), Color(0xFF8B3FD8), Color(0xFFF5EEFF))
+                Brush.linearGradient(
+                    colors = listOf(Color(0xFF9C6FFF), Color(0xFF5E35B1))
                 )
             )
     ) {
-        Column(
-            modifier = Modifier
-                .align(Alignment.CenterStart)
-                .padding(start = 24.dp, top = 40.dp)
-        ) {
+        Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 20.dp)) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Menu,
+                    contentDescription = "Menu",
+                    tint = Color.White,
+                    modifier = Modifier.size(26.dp)
+                )
+                Icon(
+                    imageVector = Icons.Default.Search,
+                    contentDescription = "Search",
+                    tint = Color.White,
+                    modifier = Modifier.size(26.dp)
+                )
+            }
+            Spacer(modifier = Modifier.height(16.dp))
             Text(
                 text = "Good Morning!",
-                color = Color(0xFFE0C8F8),
-                fontSize = 16.sp
+                color = Color(0xFFD1C4E9),
+                fontSize = 15.sp,
+                fontWeight = FontWeight.Normal
             )
             Text(
                 text = "Amir Goyri",
                 color = Color.White,
-                fontSize = 28.sp,
+                fontSize = 26.sp,
                 fontWeight = FontWeight.ExtraBold
-            )
-            Spacer(modifier = Modifier.height(4.dp))
-            Text(
-                text = "What do you want to listen to?",
-                color = Color(0xFFD0B0F0),
-                fontSize = 13.sp
             )
         }
     }
 }
 
 @Composable
-private fun RecentlyPlayedItem(
-    album: Album,
-    onClick: () -> Unit
-) {
+private fun SectionHeader(title: String, modifier: Modifier = Modifier) {
+    Row(
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(horizontal = 16.dp),
+        horizontalArrangement = Arrangement.SpaceBetween,
+        verticalAlignment = Alignment.CenterVertically
+    ) {
+        Text(
+            text = title,
+            color = Color(0xFF1A1A2E),
+            fontSize = 20.sp,
+            fontWeight = FontWeight.Bold
+        )
+        Text(
+            text = "See more",
+            color = Color(0xFF7C4DFF),
+            fontSize = 13.sp,
+            fontWeight = FontWeight.Medium
+        )
+    }
+}
+
+@Composable
+private fun RecentlyPlayedItem(album: Album, onClick: () -> Unit) {
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 6.dp)
+            .padding(horizontal = 16.dp, vertical = 5.dp)
             .clickable(onClick = onClick),
-        shape = RoundedCornerShape(14.dp),
+        shape = RoundedCornerShape(16.dp),
         colors = CardDefaults.cardColors(containerColor = Color.White),
-        elevation = CardDefaults.cardElevation(defaultElevation = 3.dp)
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
         Row(
             modifier = Modifier
@@ -211,18 +234,24 @@ private fun RecentlyPlayedItem(
                     text = album.title,
                     color = Color(0xFF1A1A2E),
                     fontSize = 15.sp,
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Bold,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
                 Text(
-                    text = album.artist,
+                    text = "${album.artist} • Popular Song",
                     color = Color(0xFF757575),
                     fontSize = 13.sp,
                     maxLines = 1,
                     overflow = TextOverflow.Ellipsis
                 )
             }
+            Icon(
+                imageVector = Icons.Default.MoreVert,
+                contentDescription = "More options",
+                tint = Color(0xFF9E9E9E),
+                modifier = Modifier.size(20.dp)
+            )
         }
     }
 }
