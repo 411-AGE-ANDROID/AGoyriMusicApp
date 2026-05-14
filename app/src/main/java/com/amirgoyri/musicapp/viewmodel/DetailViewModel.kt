@@ -24,7 +24,7 @@ class DetailViewModel : ViewModel() {
     private val _isPlaying = MutableStateFlow(false)
     val isPlaying: StateFlow<Boolean> = _isPlaying
 
-    fun fetchAlbumDetail(id: Int) {
+    fun fetchAlbumDetail(id: String) {
         viewModelScope.launch {
             _uiState.value = AlbumDetailUiState.Loading
             try {

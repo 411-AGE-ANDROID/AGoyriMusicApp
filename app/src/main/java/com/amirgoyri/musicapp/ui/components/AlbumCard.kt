@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.MusicNote
 import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
@@ -16,11 +17,13 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.amirgoyri.musicapp.data.model.Album
 
 @Composable
@@ -37,10 +40,21 @@ fun AlbumCard(
             .clickable(onClick = onClick)
     ) {
         AsyncImage(
-            model = album.image,
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(album.image)
+                .crossfade(true)
+                .build(),
             contentDescription = album.title,
             modifier = Modifier.fillMaxSize(),
-            contentScale = ContentScale.Crop
+            contentScale = ContentScale.Crop,
+            error = {
+                Box(
+                    modifier = Modifier.fillMaxSize().background(Color(0xFF6B2FA0)),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Icon(Icons.Default.MusicNote, contentDescription = null, tint = Color.White)
+                }
+            }
         )
         Box(
             modifier = Modifier

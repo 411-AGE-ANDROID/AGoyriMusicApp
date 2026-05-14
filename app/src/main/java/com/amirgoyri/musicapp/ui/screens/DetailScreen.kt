@@ -20,7 +20,9 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.amirgoyri.musicapp.data.model.Album
 import com.amirgoyri.musicapp.data.model.Track
 import com.amirgoyri.musicapp.ui.components.MiniPlayer
@@ -30,7 +32,7 @@ import com.amirgoyri.musicapp.viewmodel.DetailViewModel
 
 @Composable
 fun DetailScreen(
-    albumId: Int,
+    albumId: String,
     viewModel: DetailViewModel,
     onBackClick: () -> Unit
 ) {
@@ -181,7 +183,10 @@ private fun AlbumHeroSection(
             .height(340.dp)
     ) {
         AsyncImage(
-            model = album.image,
+            model = ImageRequest.Builder(LocalContext.current)
+                .data(album.image)
+                .crossfade(true)
+                .build(),
             contentDescription = album.title,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop

@@ -38,9 +38,9 @@ fun AppNavigation() {
         }
         composable(
             route = "detail/{albumId}",
-            arguments = listOf(navArgument("albumId") { type = NavType.IntType })
+            arguments = listOf(navArgument("albumId") { type = NavType.StringType })
         ) { backStackEntry ->
-            val albumId = backStackEntry.arguments?.getInt("albumId") ?: return@composable
+            val albumId = backStackEntry.arguments?.getString("albumId") ?: return@composable
             val detailViewModel: DetailViewModel = viewModel()
             DetailScreen(
                 albumId = albumId,

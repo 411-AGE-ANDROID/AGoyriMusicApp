@@ -18,7 +18,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.amirgoyri.musicapp.data.model.Album
 
 @Composable
@@ -41,7 +43,10 @@ fun MiniPlayer(
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
-                model = album?.image,
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(album?.image)
+                    .crossfade(true)
+                    .build(),
                 contentDescription = album?.title,
                 modifier = Modifier
                     .size(48.dp)

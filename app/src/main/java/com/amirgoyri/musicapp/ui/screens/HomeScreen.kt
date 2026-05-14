@@ -20,7 +20,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.amirgoyri.musicapp.data.model.Album
 import com.amirgoyri.musicapp.ui.components.AlbumCard
 import com.amirgoyri.musicapp.ui.components.MiniPlayer
@@ -30,7 +32,7 @@ import com.amirgoyri.musicapp.viewmodel.HomeViewModel
 @Composable
 fun HomeScreen(
     viewModel: HomeViewModel,
-    onAlbumClick: (Int) -> Unit
+    onAlbumClick: (String) -> Unit
 ) {
     val uiState by viewModel.uiState.collectAsState()
     val isPlaying by viewModel.isPlaying.collectAsState()
@@ -193,7 +195,10 @@ private fun RecentlyPlayedItem(
             verticalAlignment = Alignment.CenterVertically
         ) {
             AsyncImage(
-                model = album.image,
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(album.image)
+                    .crossfade(true)
+                    .build(),
                 contentDescription = album.title,
                 modifier = Modifier
                     .size(56.dp)

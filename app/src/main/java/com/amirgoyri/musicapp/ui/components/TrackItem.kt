@@ -15,7 +15,9 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.ui.platform.LocalContext
 import coil.compose.AsyncImage
+import coil.request.ImageRequest
 import com.amirgoyri.musicapp.data.model.Track
 
 @Composable
@@ -46,7 +48,10 @@ fun TrackItem(
             )
             Spacer(modifier = Modifier.width(8.dp))
             AsyncImage(
-                model = track.albumImage,
+                model = ImageRequest.Builder(LocalContext.current)
+                    .data(track.albumImage)
+                    .crossfade(true)
+                    .build(),
                 contentDescription = track.title,
                 modifier = Modifier
                     .size(44.dp)
